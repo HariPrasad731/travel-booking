@@ -58,7 +58,7 @@ export default function Trips({ onSelect, searchData }) {
     return () => clearTimeout(timer);
   }, []);
 
-  /* ✅ SEARCH FILTER */
+  /* ✅ SEARCH BEHAVIOR */
   const visibleTrips = searchData
     ? trips.filter(
         (trip) =>
@@ -73,11 +73,11 @@ export default function Trips({ onSelect, searchData }) {
 
   return (
     <section
-      id="trips-section"  /* ✅ FIXED ID */
-      className="max-w-7xl mx-auto px-4 py-16 scroll-mt-20"
+      id="available-trips"
+      className="max-w-7xl mx-auto px-4 py-16"
     >
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+      <div className="flex items-center justify-between mb-6">
         <h2 className="text-3xl font-bold text-gray-800">
           Available Trips
         </h2>
@@ -85,7 +85,7 @@ export default function Trips({ onSelect, searchData }) {
         <select
           value={sort}
           onChange={(e) => setSort(e.target.value)}
-          className="border rounded-lg px-3 py-2 w-full sm:w-auto focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="border rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
           <option value="low">Price: Low to High</option>
           <option value="high">Price: High to Low</option>
@@ -98,16 +98,14 @@ export default function Trips({ onSelect, searchData }) {
           Array.from({ length: 4 }).map((_, i) => (
             <Skeleton key={i} />
           ))
-        ) : sortedTrips.length > 0 ? (
+        ) : (
           sortedTrips.map((trip) => (
             <motion.div
               key={trip.id}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3 }}
-              className="bg-white rounded-xl shadow p-4
-                         flex flex-col sm:flex-row
-                         sm:justify-between sm:items-center gap-4"
+              className="bg-white rounded-xl shadow p-4 flex justify-between items-center"
             >
               {/* Trip Info */}
               <div>
@@ -120,23 +118,19 @@ export default function Trips({ onSelect, searchData }) {
               </div>
 
               {/* Price + Action */}
-              <div className="sm:text-right flex flex-col sm:items-end">
+              <div className="text-right">
                 <p className="text-xl font-bold text-blue-600">
                   ₹{trip.price.toLocaleString()}
                 </p>
                 <button
                   onClick={() => onSelect(trip.price)}
-                  className="mt-2 text-sm bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700 transition"
+                  className="mt-2 text-sm bg-blue-600 text-white px-5 py-1.5 rounded-lg hover:bg-blue-700 transition"
                 >
                   Select
                 </button>
               </div>
             </motion.div>
           ))
-        ) : (
-          <p className="text-gray-500 text-center py-8">
-            No trips found for the selected route.
-          </p>
         )}
       </div>
     </section>
